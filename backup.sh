@@ -2,6 +2,7 @@
 
 
 WAITTIME=${BACKUP_WAITTIME:-60}
+SLEEPTIME=${BACKUP_SLEEPTIME:-3600}
 SRC_DIR=${BACKUP_SOURCE:-/data}
 
 sed -i "s/<gs_access_key_id>/${GS_ACCESS_KEY_ID}/" /.boto
@@ -23,5 +24,6 @@ while inotifywait -r -e ${INOTIFYWAIT_EVENTS} ${SRC_DIR} ; do
   echo "starting cleanup"
   duplicity remove-all-but-n-full 3 --force --no-encryption --allow-source-mismatch ${BACKUP_DEST}
   duplicity cleanup --force --no-encryption ${BACKUP_DEST}
+  sleep ${SLEEPTIME}
 done
 
